@@ -4,7 +4,7 @@
     <input
       type="text"
       placeholder="Name"
-      v-model="procedure.name"
+      v-model.trim="procedure.name"
     >
     <button @click.prevent="createProcedure">Create</button>
   </form>
@@ -13,20 +13,20 @@
 <script>
 export default {
   name: 'Form',
-      methods: {
-        createProcedure() {
-          this.procedure.id = Date.now()
-          this.$emit('create', this.procedure)
-          this.procedure = {name: ''}
-        }
+  methods: {
+    createProcedure() {
+      this.procedure.id = Date.now()
+      this.$emit('create', this.procedure)
+      this.procedure = {name: ''}
     },
+  },
   data() {
     return {
       procedure: {
         name: ''
       }
     }
-  }
+  },
 }
 </script>
 

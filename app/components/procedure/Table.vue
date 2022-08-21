@@ -1,8 +1,6 @@
 <template>
   <div>  
-    <div v-for="p in procedures" class="procedure-item" :key="p.id">
-      {{p.id}} {{p.name}}
-    </div>
+    <procedure-item v-for="procedure in procedures" :procedure="procedure" :key="procedure.id" />
   </div>
 </template>
 
