@@ -8,7 +8,7 @@
       {{ employee.coefficient }}
     </div>
     <div class="col-md-1 col-sm-2">
-      <button class="btn text-danger" @click="$emit('remove', employee)">
+      <button class="btn text-danger" @click.stop.prevent="$emit('remove', employee)">
         <i class="bi bi-trash3"></i>
       </button>
     </div>
