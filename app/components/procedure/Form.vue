@@ -1,12 +1,18 @@
 <template>
   <form>
-    <h4>Create Procedure</h4>
-    <input
-      type="text"
-      placeholder="Name"
-      v-model.trim="procedure.name"
-    >
-    <button @click.prevent="createProcedure">Create</button>
+      <input
+        class="form-control"
+        type="text"
+        placeholder="Procedure Name"
+        v-model.trim="procedure.name"
+      >
+      <button
+        :disabled="!procedure.name.length"
+        @click.prevent="createProcedure"
+        class="btn btn-success mt-2 justify-self-end"
+      >
+        Create
+      </button>
   </form>
 </template>
 
@@ -15,7 +21,6 @@ export default {
   name: 'Form',
   methods: {
     createProcedure() {
-      this.procedure.id = Date.now()
       this.$emit('create', this.procedure)
       this.procedure = {name: ''}
     },
@@ -29,7 +34,3 @@ export default {
   },
 }
 </script>
-
-<style>
-
-</style>

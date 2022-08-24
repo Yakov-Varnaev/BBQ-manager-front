@@ -1,6 +1,14 @@
 <template>
-  <div class="procedure-row-item">
-    <strong>{{procedure.id}}</strong> {{procedure.name}}
+  <div class="d-flex align-items-center d-flex row">
+    <strong class="col-md-1">{{ procedure.id }}</strong>
+    <div class="col-md-10 text-center">
+      {{ procedure.name }}
+    </div>
+    <div class="col-md-1">
+      <button class="btn text-danger" @click="$emit('remove', procedure)">
+        <i class="bi bi-trash3"></i>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -8,8 +16,7 @@
 export default {
   name: 'Item',
   data() {
-    return {
-      
+    return {  
     }
   },
   props: {
@@ -17,7 +24,8 @@ export default {
       type: Object,
       required: true,
     }
-  }
+  },
+  methods: {}
 }
 </script>
 

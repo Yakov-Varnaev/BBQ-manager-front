@@ -1,9 +1,11 @@
 <template>
-  <div class="dialog" v-if="show" @click="hideDialog">
-    <div class="dialog__content" @click.stop>
-      <slot></slot>
+  <transition name="fade">
+    <div class="dialog" v-if="show" @click="$emit('hide')">
+      <div class="dialog__content" @click.stop>
+        <slot></slot>
+      </div>
     </div>
-  </div>
+  </transition>
 </template>
 
 <script>
@@ -16,14 +18,24 @@ export default {
     }
   },
   methods: {
-    hideDialog() {
-      this.$emit('hide')
-    }
+  },
+  mounted() {
+
   }
 }
 </script>
 
-<style>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
 .dialog {
   top: 0;
   bottom: 0;
@@ -32,14 +44,16 @@ export default {
   background: rgba(0, 0, 0, 0.5);
   display: flex;
   position: fixed;
+  z-index: 1;
 }
 
 .dialog__content {
   margin: auto;
   background: white;
   border-radius: 5px;
-  min-height: 70px;
-  min-width: 200px;
-  padding: 10px;
+  width: 50%;
+  min-height: 100px;
+  min-width: 300px;
+  max-width: 400px;
 }
 </style>
