@@ -27,6 +27,10 @@ export default {
       required: true,
     }
   },
-  methods: {}
+  methods: {
+    openEmployee(employee) {
+      this.$router.push(`/employees/${employee.id}`)
+    }
+  }
 }
 </script>

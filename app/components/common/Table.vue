@@ -1,7 +1,7 @@
 <template>
-  <ul class="list-group list-group-flush">
+  <div class="list-group list-group-flush">
     <slot></slot>
-  </ul>
+  </div>
 </template>
 
 <script>

@@ -19,9 +19,13 @@
         </div>
       </Dialog>
       <CommonTable class="mt-2 col-lg-8 offset-lg-2">
-        <li class="list-group-item" v-for="empl in employees" :key="empl.id">
+        <button
+          class="list-group-item list-group-item-action"
+          v-for="empl in employees" :key="empl.id"
+          @click="openEmployee(empl)"
+        >
           <employee-item :employee="empl" @remove="deleteEmployee" />
-        </li>
+        </button>
       </CommonTable>
     </div>
   </div>
@@ -62,6 +66,9 @@ export default {
         console.log(response)
       }
     },
+    openEmployee(employee) {
+      this.$router.push(`/employees/${employee.id}`)
+    }
   },
   data() {
     return {
