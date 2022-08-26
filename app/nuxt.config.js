@@ -23,7 +23,7 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '@/assets/css/main.css'
+    '@/assets/scss/main.scss'
   ],
 
   buildModules: [
@@ -32,8 +32,7 @@ export default {
 
   styleResources: {
     scss: [
-      '~/assets/scss/main.scss',
-      '~/assets/scss/variables.scss'
+      '~/assets/scss/_variables.scss'
     ]
   },
 
@@ -51,7 +50,8 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     '@nuxtjs/style-resources',
-    'bootstrap-vue/nuxt', 
+    'bootstrap-vue/nuxt',
+    '@nuxtjs/color-mode'
   ],
   bootstrapVue: {
     icons: true,

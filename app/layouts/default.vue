@@ -6,3 +6,7 @@
     </main>
   </div>
 </template>
+
+<style>
+
+</style>

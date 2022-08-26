@@ -19,9 +19,9 @@
         </div>
       </Dialog>
       <CommonTable :procedures="procedures" class="mt-2 col-lg-8 offset-lg-2">
-        <li class="list-group-item" v-for="procedure in procedures" :procedure="procedure" :key="procedure.id">
+        <button class="list-group-item list-group-item-action" v-for="procedure in procedures" :procedure="procedure" :key="procedure.id">
           <procedure-item :procedure="procedure" @remove="deleteProcedure" />
-        </li>
+        </button>
       </CommonTable>
     </div>
   </div>

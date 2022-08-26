@@ -5,7 +5,7 @@
       {{ procedure.name }}
     </div>
     <div class="col-md-1">
-      <button class="btn text-danger" @click="$emit('remove', procedure)">
+      <button class="btn text-danger" @click.stop.prevent="$emit('remove', procedure)">
         <i class="bi bi-trash3"></i>
       </button>
     </div>

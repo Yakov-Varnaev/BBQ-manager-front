@@ -9,9 +9,9 @@
       <button
         :disabled="!procedure.name.length"
         @click.prevent="createProcedure"
-        class="btn btn-success mt-2 justify-self-end"
+        class="btn text-success mt-2 justify-self-end"
       >
-        Create
+        <i class="bi bi-check-lg"></i> Save
       </button>
   </form>
 </template>
