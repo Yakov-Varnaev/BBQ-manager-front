@@ -1,7 +1,7 @@
 <template>
-  <div class="col-lg-8 offset-lg-2 d-flex justify-content-between align-items-center mt-3">
+  <v-container class="col-lg-8 d-flex align-center justify-space-between">
     <slot></slot>
-  </div>
+  </v-container>
 </template>
 
 <script>

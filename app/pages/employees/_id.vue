@@ -27,7 +27,6 @@ export default {
   methods: {
     async fetchEmployee() {
       const response = await this.$axios.get(`/employees/${this.$route.params.id}/`)
-      console.log(response.data)
       this.employee = response.data
     }
   },

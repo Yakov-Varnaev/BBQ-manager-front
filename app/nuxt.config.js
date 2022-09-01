@@ -13,45 +13,38 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: "stylesheet", href: "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css", integrity: "sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx", crossorigin: "anonymous"},
-      {rel: "stylesheet", href: "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css"}
     ],
     script: [
-      {src: "https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js", integrity: "sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa", crossorigin: "anonymous", body: true}
     ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
-    '@/assets/scss/main.scss'
   ],
 
   buildModules: [
-    '@nuxtjs/style-resources'
   ],
 
   styleResources: {
-    scss: [
-      '~/assets/scss/_variables.scss'
-    ]
   },
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
+  // Inside - nuxt.config.js
   plugins: [
+    { src: '~/plugins/vuex-persist.js', mode: 'client' }
   ],
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [],
+  buildModules: [
+    '@nuxtjs/vuetify',
+  ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
-    '@nuxtjs/style-resources',
-    'bootstrap-vue/nuxt',
-    '@nuxtjs/color-mode'
   ],
   bootstrapVue: {
     icons: true,
@@ -64,4 +57,7 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
+  server: {
+    host: "0"
+  }
 }

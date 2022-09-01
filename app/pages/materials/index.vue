@@ -2,12 +2,9 @@
   <div class="container">
     <common-heading>
       <h2>Material</h2>
-      <button class="btn text-success">
-        <!-- <h4 class="m-0 p-0"> -->
-          <!-- <i class="bi bi-plus-lg"></i> -->
+      <button class="btn btn-success">
           <i class="bi bi-plus-circle"></i>
           Add
-        <!-- </h4> -->
       </button>
     </common-heading>
     <CommonTable class="mt-2 col-lg-8 offset-lg-2">
