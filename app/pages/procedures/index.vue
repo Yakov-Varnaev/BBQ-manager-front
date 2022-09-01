@@ -23,23 +23,23 @@
         :items="procedures"
         item-key="id"
       >
-      <template v-slot:header.actions="{ header }">
+      <template v-slot:[`header.actions`]="{ header }">
         <v-layout justify-end>
           {{ header.text }}
         </v-layout>
       </template>
-      <template v-slot:header.name="{ header }">
+      <template v-slot:[`header.name`]="{ header }">
         <v-layout justify-center>
           {{ header.text }}
         </v-layout>
       </template>
-      <template v-slot:item.actions="{ item }">
+      <template v-slot:[`item.actions`]="{ item }">
         <v-layout justify-end>
           <v-icon>mdi-pencil</v-icon>
           <v-icon @click="showDeleteDialog(item)">mdi-delete</v-icon>
         </v-layout>
       </template>
-      <template v-slot:item.name="{ item }">
+      <template v-slot:[`item.name`]="{ item }">
         <v-layout justify-center>
           <div class="text-capitalize">{{ item.name }}</div>
         </v-layout>
