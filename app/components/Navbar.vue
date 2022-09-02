@@ -8,8 +8,8 @@
           class="mx-2"
         ></v-divider>
         <client-only>
+          <h4 v-if="currentObject" class="m-0 p-0"> {{currentObject.address}}</h4>
         </client-only>
-        <h4 v-if="currentObject" class="m-0 p-0"> {{currentObject.address}}</h4>
         <v-menu>
           <template v-slot:activator="{ on, attrs }">
             <v-btn

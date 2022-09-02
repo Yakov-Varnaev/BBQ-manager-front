@@ -18,7 +18,6 @@
     </common-heading>
     <v-container class="col-lg-8">
       <v-data-table
-        dense
         :headers="headers"
         :items="procedures"
         item-key="id"

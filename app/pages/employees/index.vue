@@ -1,43 +1,68 @@
 <template>
   <div>
-    <div class="container">
-      <div class="col-lg-8 offset-lg-2 d-flex justify-content-between align-items-center mt-3">
-        <h2>Employees</h2>
-        <button @click="showDialog" class="btn btn-success">
-          Add
-        </button>
-      </div>
-      <Dialog :show="dialogVisible" @hide="hideDialog">
-        <div class="m-3">
-          <div class="d-flex align-items-center justify-content-between">
-            <h4 class="m-0 p-0">Add Employee</h4>
-            <button class="btn btn-xs text-danger" @click="hideDialog">
-              <i class="bi bi-x-lg"></i>
-            </button>
-          </div>
-          <EmployeeForm @create="createEmployee" class="mt-2" />
-        </div>
-      </Dialog>
-      <CommonTable class="mt-2 col-lg-8 offset-lg-2">
-        <button
-          class="list-group-item list-group-item-action"
-          v-for="empl in employees" :key="empl.id"
-          @click="openEmployee(empl)"
-        >
-          <employee-item :employee="empl" @remove="deleteEmployee" />
-        </button>
-      </CommonTable>
-    </div>
+    <common-heading>
+      <h2>Employee</h2>
+      <v-dialog v-model="dialogVisible" content-class="col-4 elevation-0">
+        <template v-slot:activator="{ on, attrs }">
+          <button-add v-on="on" v-bind="attrs"/>
+        </template>
+          <v-card>
+            <v-card-title>
+              Add Employee
+            </v-card-title>
+            <v-card-text>
+              <EmployeeForm @create="createEmployee"/>
+            </v-card-text>
+          </v-card>
+      </v-dialog>
+    </common-heading>
+    <v-container class="col-lg-8">
+      <v-data-table
+        :headers="headers"
+        :items="employees"
+        item-key="id"
+      >
+      <template v-slot:[`header.actions`]="{ header }">
+        <v-layout justify-end>
+          {{ header.text }}
+        </v-layout>
+      </template>
+
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-layout justify-end>
+          <v-icon>mdi-pencil</v-icon>
+          <v-icon @click="showDeleteDialog(item)">mdi-delete</v-icon>
+        </v-layout>
+      </template>
+      <template v-slot:[`item.first_name`]="{ item }">
+        <v-layout justify-center>
+          {{ item.first_name }}
+        </v-layout>
+      </template>
+      </v-data-table>
+
+      <v-dialog v-model="dialogDelete" content-class="elevation-0 col-lg-4" @click:outside="closeDelete">
+        <v-card>
+          <v-card-title class="text-h5 justify-center">
+            Are you sure you want to delete <span>
+              "<span class="text-capitalize red--text">{{deleteItem.first_name}} {{deleteItem.last_name}}</span>"?
+            </span>
+          </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="blue darken-1" text @click="closeDelete">Cancel</v-btn>
+            <v-btn color="red darken-1" text @click="deleteItemConfirm">OK</v-btn>
+            <v-spacer></v-spacer>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-container>
   </div>
 </template>
 
 <script>
-import Dialog from '../../components/Dialog.vue';
+
 export default {
-  components: { Dialog },
-  props: {
-      name: "",
-  },
   methods: {
     hideDialog() {
       this.dialogVisible = false
@@ -46,22 +71,32 @@ export default {
       this.dialogVisible = true
     },
     async fetchEmployees() {
-      const employees = await this.$axios.$get('/employees/')
+      const employees = await this.$axios.$get(`/objects/${this.$store.getters.getCurrentObject.id}/employees/`)
       this.employees = employees
+    },
+    showDeleteDialog(empl) {
+      this.deleteItem = empl
+      this.dialogDelete = true
+    },
+    closeDelete() {
+      this.deleteEmployee = {}
+      this.dialogDelete = false
     },
     async createEmployee(data) {
       try {
-        const response = await this.$axios.$post('/employees/', data)
+        const response = await this.$axios.$post(`/objects/${this.$store.getters.getCurrentObject.id}/employees/`, data)
         this.employees.push(response)
         this.dialogVisible = false
       } catch ({response}) {
         console.log(response)
       }
     },
-    async deleteEmployee(employee) {
+    async deleteItemConfirm() {
       try {
-        await this.$axios.$delete(`/employees/${employee.id}/`)
-        this.employees = this.employees.filter(empl => empl.id !== employee.id)
+        await this.$axios.$delete(`/employees/${this.deleteItem.id}/`)
+        this.employees = this.employees.filter(empl => empl.id !== this.deleteItem.id)
+        this.deleteItem = {}
+        this.dialogDelete = false
       } catch ({response}) {
         console.log(response)
       }
@@ -73,7 +108,16 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      employees: []
+      dialogDelete: false,
+      deleteItem: {},
+      employees: [],
+      headers: [
+        {text: '#', value: 'id'},
+        {text: 'First Name', value: 'first_name', align: 'center'},
+        {text: 'Last Name', value: 'last_name', align: 'center'},
+        {text: 'Position', value: 'position', align: 'center'},
+        {text: 'Actions', value: 'actions', sortable: false, align: 'center'}
+      ]
     };
   },
   mounted() {
@@ -81,3 +125,9 @@ export default {
   }
 }
 </script>
+
+<style>
+.v-data-table-header th {
+  white-space: nowrap;
+}
+</style>
