@@ -34,7 +34,7 @@
           </v-list>
         </v-menu>
       </div>
-      <div class="d-flex">
+      <div class="d-flex align-center">
         <v-btn
           class="ms-1"
           text
@@ -44,6 +44,14 @@
           nuxt
         >
           {{  url.text  }}
+        </v-btn>
+        <v-btn
+         @click="setDark"
+         icon
+         small
+         elevation="0"
+        >
+          <v-icon small>mdi-theme-light-dark</v-icon>
         </v-btn>
       </div>
       </v-container>
@@ -59,6 +67,9 @@ export default {
     },
     currentObject() {
       return this.$store.getters.getCurrentObject
+    },
+    isDark() {
+      return this.$vutify.theme.dark
     }
   },
   data() {
@@ -66,13 +77,17 @@ export default {
       urls: [
         {to: '/procedures', text: 'Procedures'},
         {to: '/employees', text: 'Employees'},
-        {to: '/materials', text: 'Materials'},
+        {to: '/warehouse', text: 'Warehouse'},
       ]
     }
   },
   methods: {
+    setDark() {
+      this.$vuetify.theme.dark = !this.$vuetify.theme.dark
+    },
     setCurrentObject(obj) {
       this.$store.dispatch('setCurrentObject', obj)
+      this.$emit('updated')
     }
   },
   async mounted() {

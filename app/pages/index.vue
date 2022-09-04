@@ -1,5 +1,7 @@
 <template>
-  <h1>main</h1>
+ <common-heading>
+  <h2>Welcome</h2>
+ </common-heading>
 </template>
 
 <script setup>

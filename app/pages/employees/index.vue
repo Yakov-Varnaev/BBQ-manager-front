@@ -1,6 +1,6 @@
 <template>
   <div>
-    <common-heading>
+    <common-heading @updated="refetchData">
       <h2>Employee</h2>
       <v-dialog v-model="dialogVisible" content-class="col-4 elevation-0">
         <template v-slot:activator="{ on, attrs }">
@@ -30,7 +30,7 @@
 
       <template v-slot:[`item.actions`]="{ item }">
         <v-layout justify-end>
-          <v-icon>mdi-pencil</v-icon>
+          <v-icon @click="showEditDialog(item)">mdi-pencil</v-icon>
           <v-icon @click="showDeleteDialog(item)">mdi-delete</v-icon>
         </v-layout>
       </template>
@@ -56,6 +56,14 @@
           </v-card-actions>
         </v-card>
       </v-dialog>
+      <v-dialog v-model="dialogEdit" content-class="elevation-0 col-lg-4" @click:outside="closeEdit">
+        <v-card>
+          <v-card-title>Edit Employee</v-card-title>
+          <v-card-text>
+            <EmployeeForm :employeeInst="editEmployee" @create="submitEmployeeEdit"/>
+          </v-card-text>
+        </v-card>
+      </v-dialog>
     </v-container>
   </div>
 </template>
@@ -67,11 +75,15 @@ export default {
     hideDialog() {
       this.dialogVisible = false
     },
+    hideEditDialog() {
+      this.dialogEdit = false
+      this.editEmployee = {}
+    },
     showDialog() {
       this.dialogVisible = true
     },
     async fetchEmployees() {
-      const employees = await this.$axios.$get(`/objects/${this.$store.getters.getCurrentObject.id}/employees/`)
+      const employees = await this.$axios.$get(`/objects/${this.currentObject.id}/employees/`)
       this.employees = employees
     },
     showDeleteDialog(empl) {
@@ -82,13 +94,31 @@ export default {
       this.deleteEmployee = {}
       this.dialogDelete = false
     },
+    closeEdit() {
+      this.editEmployee = {}
+      this.dialogEdit = false
+    },
+    showEditDialog(empl) {
+      console.log(empl)
+      this.editEmployee = empl
+      this.dialogEdit = true
+    },
+    submitEmployeeEdit(employee) {
+      const {id, ...data} = employee
+      const resp = this.$axios.$put(`/employees/${id}/`, data)
+      this.hideEditDialog()
+    },
+    closeEdit() {
+      this.editEmployee = {}
+      this.dialogEdit = false
+    },
     async createEmployee(data) {
       try {
-        const response = await this.$axios.$post(`/objects/${this.$store.getters.getCurrentObject.id}/employees/`, data)
+        const response = await this.$axios.$post(`/objects/${this.currentObject.id}/employees/`, data)
         this.employees.push(response)
         this.dialogVisible = false
-      } catch ({response}) {
-        console.log(response)
+      } catch (e) {
+        console.log(e)
       }
     },
     async deleteItemConfirm() {
@@ -101,6 +131,10 @@ export default {
         console.log(response)
       }
     },
+    async refetchData() {
+      console.log('here')
+      await this.fetchEmployees()
+    },
     openEmployee(employee) {
       this.$router.push(`/employees/${employee.id}`)
     }
@@ -109,6 +143,7 @@ export default {
     return {
       dialogVisible: false,
       dialogDelete: false,
+      dialogEdit: false,
       deleteItem: {},
       employees: [],
       headers: [
@@ -117,11 +152,22 @@ export default {
         {text: 'Last Name', value: 'last_name', align: 'center'},
         {text: 'Position', value: 'position', align: 'center'},
         {text: 'Actions', value: 'actions', sortable: false, align: 'center'}
-      ]
+      ],
+      editEmployee: {}
     };
   },
   mounted() {
     this.fetchEmployees()
+  },
+  computed: {
+    currentObject() {
+      return this.$store.getters.getCurrentObject
+    }
+  },
+  watch: {
+    currentObject() {
+      this.fetchEmployees()
+    }
   }
 }
 </script>
