@@ -78,10 +78,10 @@ export default {
       dialogVisible: false,
       dialogDelete: false,
       dialogEdit: false,
-      procedures: [],
       departments: [],
       deleteItem: {},
       editItem: {},
+      procedures: [],
       headers: [
         {text: '#', value: 'id'},
         {text: 'Name', value: 'name', align: 'center'},

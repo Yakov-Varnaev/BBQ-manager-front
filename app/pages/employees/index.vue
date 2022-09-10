@@ -21,6 +21,7 @@
         :headers="headers"
         :items="employees"
         item-key="id"
+        @click:row="openEmployee"
       >
       <template v-slot:[`header.actions`]="{ header }">
         <v-layout justify-end>
@@ -39,7 +40,7 @@
           {{ item.first_name }}
         </v-layout>
       </template>
-      </v-data-table>
+    </v-data-table>
 
       <v-dialog v-model="dialogDelete" content-class="elevation-0 col-lg-4" @click:outside="closeDelete">
         <v-card>
@@ -106,10 +107,6 @@ export default {
       const {id, ...data} = employee
       const resp = this.$axios.$put(`/employees/${id}/`, data)
       this.hideEditDialog()
-    },
-    closeEdit() {
-      this.editEmployee = {}
-      this.dialogEdit = false
     },
     async createEmployee(data) {
       try {
