@@ -1,6 +1,6 @@
 <template>
   <div>
-    <common-heading>
+    <common-heading @updated="refetchData">
       <h2>Procedures</h2>
       <v-dialog v-model="dialogVisible" content-class="col-4 elevation-0">
         <template v-slot:activator="{ on, attrs }">
@@ -34,7 +34,7 @@
       </template>
       <template v-slot:[`item.actions`]="{ item }">
         <v-layout justify-end>
-          <v-icon>mdi-pencil</v-icon>
+          <v-icon @click="showEditDialog(item)">mdi-pencil</v-icon>
           <v-icon @click="showDeleteDialog(item)">mdi-delete</v-icon>
         </v-layout>
       </template>
@@ -57,6 +57,14 @@
         </v-card>
       </v-dialog>
     </v-container>
+    <v-dialog v-model="dialogEdit" content-class="elevation-0 col-lg-4" @click:outside="closeEdit">
+      <v-card>
+        <v-card-title>Edit Employee</v-card-title>
+        <v-card-text>
+          <ProcedureForm :procedure="editItem" @create="submitEdit"/>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -69,9 +77,11 @@ export default {
     return {
       dialogVisible: false,
       dialogDelete: false,
+      dialogEdit: false,
       procedures: [],
       departments: [],
       deleteItem: {},
+      editItem: {},
       headers: [
         {text: '#', value: 'id'},
         {text: 'Name', value: 'name', align: 'center'},
@@ -84,11 +94,14 @@ export default {
       this.dialogVisible = false
     },
     showDialog() {
-      console.log('Show Dialog')
       this.dialogVisible = true
     },
+    async refetchData() {
+      await this.fetchProcedures()
+    },
     async fetchProcedures() {
-      const procedures = await this.$axios.$get(`/procedures/`)
+      const procedures = await this.$axios.$get(`/procedures/`, {params: {object: this.currentObject.id}})
+      console.log(procedures)
       this.procedures = procedures
     },
     async createProcedure(data) {
@@ -100,6 +113,19 @@ export default {
       } catch ({response}) {
         console.log(response)
       }
+    },
+    showEditDialog(procedure) {
+      this.editItem = procedure
+      this.dialogEdit = true
+    },
+    closeEdit() {
+      this.editItem = {}
+      this.dialogEdit = false
+    },
+    async submitEdit(procedure) {
+      const {id, ...data} = procedure
+      const resp = this.$axios.put(`/procedures/${id}/`, data)
+      this.closeEdit()
     },
     showDeleteDialog(procedure) {
       Object.assign(this.deleteItem, procedure)
@@ -123,6 +149,16 @@ export default {
   },
   mounted() {
     this.fetchProcedures()
+  },
+  computed: {
+    currentObject() {
+      return this.$store.getters.getCurrentObject
+    },
+  },
+  watch: {
+    currentObject() {
+      this.fetchProcedures()
+    }
   }
 }
 </script>

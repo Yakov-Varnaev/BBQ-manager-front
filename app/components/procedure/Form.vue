@@ -13,33 +13,40 @@
       item-value="id"
     >
     </v-select>
-    <button-save @click="createProcedure"/>
+    <button-save @click="createProcedure" :disabled="isButtonDisabled"/>
   </v-form>
 </template>
 
 <script>
 export default {
   name: 'Form',
+  props: {
+    procedure: {
+      type: Object,
+      required: false,
+      default: () => {
+        return {
+          name: '',
+          department: null
+        }
+      }
+    }
+  },
   methods: {
     createProcedure() {
       this.$emit('create', this.procedure)
-      this.procedure = {
-        name: '',
-        department: null
-      }
     },
   },
   data() {
     return {
-      procedure: {
-        name: '',
-        department: null
-      }
     }
   },
   computed: {
     departments() {
       return this.$store.getters.getObjectDepartments
+    },
+    isButtonDisabled() {
+      return this.procedure.name?.length === 0 || this.procedure.department === null
     }
   },
 }

@@ -99,7 +99,6 @@ export default {
       this.dialogEdit = false
     },
     showEditDialog(empl) {
-      console.log(empl)
       this.editEmployee = empl
       this.dialogEdit = true
     },
